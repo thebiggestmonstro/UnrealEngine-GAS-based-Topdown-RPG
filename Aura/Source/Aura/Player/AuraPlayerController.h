@@ -20,6 +20,7 @@ class AURA_API AAuraPlayerController : public APlayerController
 
 public:
 	AAuraPlayerController();
+	virtual void PlayerTick(float DeltaTime) override;
 	
 protected:
 	virtual void BeginPlay() override;
@@ -33,4 +34,15 @@ private:
 	TObjectPtr<UInputAction> MoveAction;
 
 	void Move(const FInputActionValue& InputActionValue);
+
+	/*
+	* Hightlight Section
+	*/
+	void CursorTrace();
+	static void HighlightActor(AActor* InActor);
+	static void UnHighlightActor(AActor* InActor);
+
+	TObjectPtr<AActor> LastActor;
+	TObjectPtr<AActor> ThisActor;
+	FHitResult CursorHit;
 };
