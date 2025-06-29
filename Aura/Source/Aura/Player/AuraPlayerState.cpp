@@ -1,26 +1,21 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Character/AuraEnemy.h"
+#include "Player/AuraPlayerState.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/AuraAttributeSet.h"
 
-AAuraEnemy::AAuraEnemy()
+AAuraPlayerState::AAuraPlayerState()
 {
 	AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponent>("AbilitySystemComponent");
 	AbilitySystemComponent->SetIsReplicated(true);
 
 	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
+
+	NetUpdateFrequency = 100.f;
 }
 
-void AAuraEnemy::HighlightActor_Implementation()
+UAbilitySystemComponent* AAuraPlayerState::GetAbilitySystemComponent() const
 {
-	GetMesh()->SetRenderCustomDepth(true);
-	Weapon->SetRenderCustomDepth(true);
-}
-
-void AAuraEnemy::UnHighlightActor_Implementation()
-{
-	GetMesh()->SetRenderCustomDepth(false);
-	Weapon->SetRenderCustomDepth(false);
+	return AbilitySystemComponent;
 }
