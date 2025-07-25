@@ -42,4 +42,18 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 			OnMaxManaChanged.Broadcast(Data.NewValue);
 		}
 	);
+
+	if (GetAuraASC())
+	{
+		GetAuraASC()->EffectAssetTags.AddLambda(
+			[this](const FGameplayTagContainer& AssetTags)
+			{
+				for (const FGameplayTag& Tag : AssetTags)
+				{
+					const FString Msg = FString::Printf(TEXT("GE Tag : %s"), *Tag.ToString());
+					GEngine->AddOnScreenDebugMessage(-1, 8.0f, FColor::Blue, Msg);
+				}
+			}
+		);
+	}
 }
