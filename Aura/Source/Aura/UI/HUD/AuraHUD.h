@@ -11,6 +11,8 @@ class UAttributeSet;
 class UAbilitySystemComponent;
 class UOverlayWidgetController;
 struct FWidgetControllerParams;
+class UAttributeMenuWidgetController;
+
 /**
  * 
  */
@@ -26,6 +28,7 @@ public:
 	* Get Widgets
 	*/
 	UOverlayWidgetController* GetOverlayWidgetController(const FWidgetControllerParams& WCParams);
+	UAttributeMenuWidgetController* GetAttributeMenuWidgetController(const FWidgetControllerParams& WCParams);
 	
 private:
 	UPROPERTY()
@@ -39,4 +42,10 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UOverlayWidgetController> OverlayWidgetControllerClass;
+
+	UPROPERTY()
+	TObjectPtr<UAttributeMenuWidgetController> AttributeMenuWidgetController;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UAttributeMenuWidgetController> AttributeMenuWidgetControllerClass;
 };
