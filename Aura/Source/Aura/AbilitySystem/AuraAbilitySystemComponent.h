@@ -8,6 +8,8 @@
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FEffectAssetTags, const FGameplayTagContainer& /*AssetTags*/);
 
+class UGameplayAbility;
+
 /**
  * 
  */
@@ -18,6 +20,11 @@ class AURA_API UAuraAbilitySystemComponent : public UAbilitySystemComponent
 	
 public:
 	void AbilityActorInfoSet();
+
+	/*
+	* Gameplay Ability Section
+	*/
+	void AddCharacterAbilities(const TArray<TSubclassOf<UGameplayAbility>>& StartupAbilities);
 
 	/*
 	* Delegate Section
