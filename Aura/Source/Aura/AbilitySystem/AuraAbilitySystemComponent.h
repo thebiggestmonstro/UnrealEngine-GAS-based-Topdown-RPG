@@ -30,6 +30,13 @@ public:
 	* Delegate Section
 	*/
 	FEffectAssetTags EffectAssetTags;
+
+	/*
+	* Input Section
+	*/
+	void AbilityInputTagPressed(const FGameplayTag& InputTag);
+	void AbilityInputTagHeld(const FGameplayTag& InputTag);
+	void AbilityInputTagReleased(const FGameplayTag& InputTag);
 	
 protected:
 	UFUNCTION(Client, Reliable)

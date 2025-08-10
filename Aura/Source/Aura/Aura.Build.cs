@@ -22,6 +22,8 @@ public class Aura : ModuleRules
 			"GameplayTags",
             "GameplayTasks",
             "GameplayAbilities",
+            // Path Finding
+            "NavigationSystem", 
          });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
