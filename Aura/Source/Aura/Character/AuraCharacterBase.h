@@ -24,6 +24,11 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
 
+	/*
+	* Combat Interface
+	*/
+	virtual FVector GetCombatSocketLocation_Implementation() override;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -35,6 +40,9 @@ protected:
 	*/
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat")
 	TObjectPtr<USkeletalMeshComponent> Weapon;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	FName WeaponTipSocketName;
 
 	/*
 	* GAS variables
