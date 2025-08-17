@@ -23,7 +23,9 @@ public class Aura : ModuleRules
             "GameplayTasks",
             "GameplayAbilities",
             // Path Finding
-            "NavigationSystem", 
+            "NavigationSystem",
+            // VFX
+            "Niagara"
          });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
