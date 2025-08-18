@@ -9,6 +9,7 @@
 #include "Components/AudioComponent.h"
 #include "Aura/Aura.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 
 AAuraProjectile::AAuraProjectile()
 {
