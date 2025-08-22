@@ -42,6 +42,8 @@ public:
 	FGameplayTag Damage_Arcane;
 	FGameplayTag Damage_Physical;
 
+	FGameplayTag Effects_HitReact;
+
 private:
 	static FAuraGameplayTags GameplayTags;
 };

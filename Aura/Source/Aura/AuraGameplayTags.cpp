@@ -152,4 +152,13 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 		FName("Damage.Physical"),
 		FString("Physical Damage Type")
 	);
+
+	/*
+	 * Action Types
+	 */
+
+	GameplayTags.Effects_HitReact = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Effects.HitReact"),
+		FString("Tag granted when Hit Reacting")
+	);
 }
