@@ -147,6 +147,13 @@ public:
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Mana);
 
 	/*
+	* Meta Attributes - Only for Calculation
+	*/
+	UPROPERTY(BlueprintReadOnly, Category = "Meta Attributes")
+	FGameplayAttributeData IncomingDamage;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, IncomingDamage);
+
+	/*
 	* Replicate Function
 	*/
 
@@ -204,4 +211,7 @@ public:
 
 protected:
 	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const;
+
+private:
+	void HandleIncomingDamage(const FEffectProperties& Props);
 };
