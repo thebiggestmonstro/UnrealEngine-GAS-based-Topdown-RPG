@@ -29,6 +29,7 @@ public:
 
 	/** Combat Interface */
 	virtual int32 GetPlayerLevel_Implementation() override;
+	virtual void Die() override;
 	/** end Combat Interface */
 
 	/*
@@ -74,4 +75,10 @@ protected:
 	*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UWidgetComponent> HealthBar;
+
+	/*
+	* Combat Interface Section
+	*/
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat")
+	float LifeSpan = 5.f;
 };
