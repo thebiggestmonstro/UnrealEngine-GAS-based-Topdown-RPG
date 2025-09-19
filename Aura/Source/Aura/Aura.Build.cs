@@ -25,7 +25,9 @@ public class Aura : ModuleRules
             // Path Finding
             "NavigationSystem",
             // VFX
-            "Niagara"
+            "Niagara",
+            // AI
+            "AIModule"
          });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
