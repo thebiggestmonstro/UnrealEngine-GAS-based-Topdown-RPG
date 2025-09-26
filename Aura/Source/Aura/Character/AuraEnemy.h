@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Character/AuraCharacterBase.h"
 #include "Interaction/HighlightInterface.h"
+#include "Interaction/EnemyInterface.h"
 #include "UI/WidgetController/OverlayWidgetController.h"
 #include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "AuraEnemy.generated.h"
@@ -17,7 +18,7 @@ class AAuraAIController;
  * 
  */
 UCLASS()
-class AURA_API AAuraEnemy : public AAuraCharacterBase, public IHighlightInterface
+class AURA_API AAuraEnemy : public AAuraCharacterBase, public IHighlightInterface, public IEnemyInterface
 {
 	GENERATED_BODY()
 	
@@ -34,6 +35,11 @@ public:
 	virtual int32 GetPlayerLevel_Implementation() override;
 	virtual void Die() override;
 	/** end Combat Interface */
+
+	/** Enemy Interface */
+	virtual void SetCombatTarget_Implementation(AActor* InCombatTarget) override;
+	virtual AActor* GetCombatTarget_Implementation() const override;
+	/** end Enemy Interface */
 
 	/*
 	* Attribute Delegate Section
@@ -93,4 +99,10 @@ protected:
 
 	UPROPERTY()
 	TObjectPtr<AAuraAIController> AuraAIController;
+
+	/*
+	* Enemy Interface Section
+	*/
+	UPROPERTY(BlueprintReadWrite, Category = "Combat")
+	TObjectPtr<AActor> CombatTarget;
 };
