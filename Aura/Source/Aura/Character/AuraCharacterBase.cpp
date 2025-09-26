@@ -96,6 +96,16 @@ void AAuraCharacterBase::MulticastHandleDeath_Implementation()
 	Dissolve();
 }
 
+bool AAuraCharacterBase::IsDead_Implementation() const
+{
+	return bDead;
+}
+
+AActor* AAuraCharacterBase::GetAvatar_Implementation()
+{
+	return this;
+}
+
 void AAuraCharacterBase::Dissolve()
 {
 	if (IsValid(DissolveMaterialInstance))

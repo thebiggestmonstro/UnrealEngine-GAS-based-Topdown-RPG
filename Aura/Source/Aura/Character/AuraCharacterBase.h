@@ -75,6 +75,12 @@ protected:
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void MulticastHandleDeath();
 
+	virtual bool IsDead_Implementation() const override;
+
+	virtual AActor* GetAvatar_Implementation() override;
+
+	bool bDead = false;
+
 	/*
 	* Gameplay Effect Section
 	*/
