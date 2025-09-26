@@ -51,6 +51,8 @@ public:
 
 	TMap<FGameplayTag, FGameplayTag> DamageTypesToResistances;
 
+	FGameplayTag Abilities_Attack;
+
 private:
 	static FAuraGameplayTags GameplayTags;
 };
