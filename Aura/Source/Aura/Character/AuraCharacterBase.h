@@ -81,6 +81,11 @@ protected:
 
 	bool bDead = false;
 
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	TArray<FTaggedMontage> AttackMontages;
+
+	virtual TArray<FTaggedMontage> GetAttackMontages_Implementation() override;
+
 	/*
 	* Gameplay Effect Section
 	*/
