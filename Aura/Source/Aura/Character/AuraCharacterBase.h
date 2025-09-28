@@ -28,8 +28,9 @@ public:
 	/*
 	* Combat Interface
 	*/
-	virtual FVector GetCombatSocketLocation_Implementation() override;
+	virtual FVector GetCombatSocketLocation_Implementation(const FGameplayTag& MontageTag) override;
 	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
+	virtual TArray<FTaggedMontage> GetAttackMontages_Implementation() override;
 
 protected:
 	virtual void BeginPlay() override;
@@ -45,6 +46,12 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	FName WeaponTipSocketName;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	FName LeftHandSocketName;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	FName RightHandSocketName;
 
 	/*
 	* GAS variables
@@ -83,8 +90,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	TArray<FTaggedMontage> AttackMontages;
-
-	virtual TArray<FTaggedMontage> GetAttackMontages_Implementation() override;
 
 	/*
 	* Gameplay Effect Section
