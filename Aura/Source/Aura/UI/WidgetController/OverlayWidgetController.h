@@ -69,7 +69,12 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "GAS|Messages")
 	FAbilityInfoSignature AbilityInfoDelegate;
 
+	UPROPERTY(BlueprintAssignable, Category = "GAS|XP")
+	FOnAttributeChangedSignature OnXPPercentChangedDelegate;
+
 	void OnInitializeStartupAbilities(UAuraAbilitySystemComponent* ASC);
+
+	void OnXPChanged(int32 NewXP);
 
 protected:
 	/*
