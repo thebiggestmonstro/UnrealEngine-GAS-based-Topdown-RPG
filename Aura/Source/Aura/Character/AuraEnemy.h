@@ -7,7 +7,6 @@
 #include "Interaction/HighlightInterface.h"
 #include "Interaction/EnemyInterface.h"
 #include "UI/WidgetController/OverlayWidgetController.h"
-#include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "AuraEnemy.generated.h"
 
 class UWidgetComponent; 
@@ -72,12 +71,6 @@ protected:
 	*/
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Class Defaults")
 	int32 Level = 1;
-
-	/*
-	* Character Class Section
-	*/
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Class Defaults")
-	ECharacterClass CharacterClass = ECharacterClass::Warrior;
 
 	/*
 	* Widget Property Secction
