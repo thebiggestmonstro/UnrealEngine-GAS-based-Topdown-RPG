@@ -221,10 +221,12 @@ void UAuraAttributeSet::PostAttributeChange(const FGameplayAttribute& Attribute,
 	if (Attribute == GetMaxHealthAttribute())
 	{
 		SetHealth(GetMaxHealth());
+		bTopOffHealth = false;
 	}
 	if (Attribute == GetMaxManaAttribute())
 	{
 		SetMana(GetMaxMana());
+		bTopOffMana = false;
 	}
 }
 
@@ -348,8 +350,8 @@ void UAuraAttributeSet::HandleIncomingXP(const FEffectProperties& Props)
 			IPlayerInterface::Execute_AddToAttributePoints(Props.SourceCharacter, AttributePointsReward);
 			IPlayerInterface::Execute_AddToSpellPoints(Props.SourceCharacter, SpellPointsReward);
 
-			SetHealth(GetMaxHealth());
-			SetMana(GetMaxMana());
+			bTopOffHealth = true;
+			bTopOffMana = true;
 
 			IPlayerInterface::Execute_LevelUp(Props.SourceCharacter);
 		}

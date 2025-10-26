@@ -69,6 +69,9 @@ public:
 
 	TMap<FGameplayTag, TStaticFuncPtr<FGameplayAttribute()>> TagsToAttributes;
 
+	bool bTopOffHealth = false;
+	bool bTopOffMana = false;
+
 	/*
 	 * Primary Attributes
 	 */
