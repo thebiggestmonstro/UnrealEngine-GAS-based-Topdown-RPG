@@ -26,6 +26,22 @@ void UAuraWidgetController::BindCallbacksToDependencies()
 
 }
 
+void UAuraWidgetController::BroadcastAbilityInfo()
+{
+	if (!GetAuraASC()->bStartupAbilitiesGiven) 
+		return;
+
+	FForEachAbility BroadcastDelegate;
+	BroadcastDelegate.BindLambda([this](const FGameplayAbilitySpec& AbilitySpec)
+		{
+			FAuraAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(AuraAbilitySystemComponent->GetAbilityTagFromSpec(AbilitySpec));
+			Info.InputTag = AuraAbilitySystemComponent->GetInputTagFromSpec(AbilitySpec);
+			AbilityInfoDelegate.Broadcast(Info);
+		});
+
+	GetAuraASC()->ForEachAbility(BroadcastDelegate);
+}
+
 AAuraPlayerController* UAuraWidgetController::GetAuraPC()
 {
 	if (AuraPlayerController == nullptr)
