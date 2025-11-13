@@ -34,6 +34,16 @@ public:
 
 	FGameplayTag Attributes_Meta_IncomingXP;
 
+	FGameplayTag Debuff_Burn;
+	FGameplayTag Debuff_Stun;
+	FGameplayTag Debuff_Arcane;
+	FGameplayTag Debuff_Physical;
+
+	FGameplayTag Debuff_Chance;
+	FGameplayTag Debuff_Damage;
+	FGameplayTag Debuff_Duration;
+	FGameplayTag Debuff_Frequency;
+
 	FGameplayTag InputTag_LMB;
 	FGameplayTag InputTag_RMB;
 	FGameplayTag InputTag_1;
@@ -50,8 +60,6 @@ public:
 	FGameplayTag Damage_Physical;
 
 	FGameplayTag Effects_HitReact;
-
-	TMap<FGameplayTag, FGameplayTag> DamageTypesToResistances;
 
 	FGameplayTag Abilities_Attack;
 	FGameplayTag Abilities_Summon;
@@ -81,6 +89,9 @@ public:
 	FGameplayTag Montage_Attack_2;
 	FGameplayTag Montage_Attack_3;
 	FGameplayTag Montage_Attack_4;
+
+	TMap<FGameplayTag, FGameplayTag> DamageTypesToResistances;
+	TMap<FGameplayTag, FGameplayTag> DamageTypesToDebuffs;
 
 private:
 	static FAuraGameplayTags GameplayTags;
