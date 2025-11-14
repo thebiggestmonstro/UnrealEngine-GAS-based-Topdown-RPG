@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "GameplayEffectTypes.h"
+#include "AuraAbilityTypes.h"
 #include "AuraProjectile.generated.h"
 
 class USphereComponent;
@@ -30,11 +30,13 @@ public:
 	*/
 
 	UPROPERTY(BlueprintReadWrite, meta = (ExposeOnSpawn = true))
-	FGameplayEffectSpecHandle DamageEffectSpecHandle;
+	FDamageEffectParams DamageEffectParams;
 
 protected:
 	virtual void BeginPlay() override;
 	virtual void Destroyed() override;
+
+	bool IsValidOverlap(AActor* OtherActor);
 
 	UFUNCTION(BlueprintCallable)
 	virtual void OnHit();
