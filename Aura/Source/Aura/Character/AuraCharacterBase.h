@@ -92,10 +92,10 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	TObjectPtr<UAnimMontage> HitReactMontage;
 
-	virtual void Die() override;
+	virtual void Die(const FVector& DeathImpulse) override;
 
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleDeath();
+	virtual void MulticastHandleDeath(const FVector& DeathImpulse);
 
 	virtual bool IsDead_Implementation() const override;
 
