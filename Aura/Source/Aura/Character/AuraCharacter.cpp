@@ -11,6 +11,7 @@
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "UI/HUD/AuraHUD.h"
 #include "NiagaraComponent.h"
+#include "AbilitySystem/Data/LevelUpInfo.h"
 
 AAuraCharacter::AAuraCharacter()
 {

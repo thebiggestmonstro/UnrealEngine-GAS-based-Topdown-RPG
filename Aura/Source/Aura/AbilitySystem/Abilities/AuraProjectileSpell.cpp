@@ -7,7 +7,6 @@
 #include "Actor/AuraProjectile.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Interaction/CombatInterface.h"
-#include "Aura/AuraGameplayTags.h"
 
 void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
