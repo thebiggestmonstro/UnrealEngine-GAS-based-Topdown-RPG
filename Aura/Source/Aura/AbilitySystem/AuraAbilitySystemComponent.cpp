@@ -146,9 +146,9 @@ void UAuraAbilitySystemComponent::AbilityInputTagPressed(const FGameplayTag& Inp
 				if (UGameplayAbility* AbilityInstance = AbilitySpec.GetPrimaryInstance())
 				{
 					InvokeReplicatedEvent(
-						EAbilityGenericReplicatedEvent::InputReleased,
-						AbilitySpec.Handle,
-						AbilityInstance->GetCurrentActivationInfo().GetActivationPredictionKey()
+						EAbilityGenericReplicatedEvent::InputReleased, 
+						AbilitySpec.Handle, 
+						AbilitySpec.GetAbilityInstances().Last()->GetCurrentActivationInfoRef().GetActivationPredictionKey()
 					);
 				}
 			}
@@ -186,7 +186,11 @@ void UAuraAbilitySystemComponent::AbilityInputTagReleased(const FGameplayTag& In
 		if (AbilitySpec.GetDynamicSpecSourceTags().HasTagExact(InputTag) && AbilitySpec.IsActive())
 		{
 			AbilitySpecInputReleased(AbilitySpec);
-			InvokeReplicatedEvent(EAbilityGenericReplicatedEvent::InputReleased, AbilitySpec.Handle, AbilitySpec.ActivationInfo.GetActivationPredictionKey());
+			InvokeReplicatedEvent(
+				EAbilityGenericReplicatedEvent::InputReleased, 
+				AbilitySpec.Handle,
+				AbilitySpec.GetAbilityInstances().Last()->GetCurrentActivationInfoRef().GetActivationPredictionKey()
+			);
 		}
 	}
 }
