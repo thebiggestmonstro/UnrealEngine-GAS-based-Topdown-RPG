@@ -40,6 +40,7 @@ public:
 	virtual void IncremenetMinionCount_Implementation(int32 Amount) override;
 	virtual ECharacterClass GetCharacterClass_Implementation() override;
 	virtual FOnASCRegistered GetOnASCRegisteredDelegate() override;
+	virtual USkeletalMeshComponent* GetWeapon_Implementation() override;
 
 protected:
 	virtual void BeginPlay() override;

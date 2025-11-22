@@ -180,6 +180,11 @@ FOnASCRegistered AAuraCharacterBase::GetOnASCRegisteredDelegate()
 	return OnAscRegistered;
 }
 
+USkeletalMeshComponent* AAuraCharacterBase::GetWeapon_Implementation()
+{
+	return Weapon;
+}
+
 void AAuraCharacterBase::Dissolve()
 {
 	if (IsValid(DissolveMaterialInstance))

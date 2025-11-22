@@ -146,7 +146,7 @@ void UAuraAbilitySystemComponent::AbilityInputTagPressed(const FGameplayTag& Inp
 				if (UGameplayAbility* AbilityInstance = AbilitySpec.GetPrimaryInstance())
 				{
 					InvokeReplicatedEvent(
-						EAbilityGenericReplicatedEvent::InputReleased, 
+						EAbilityGenericReplicatedEvent::InputPressed,
 						AbilitySpec.Handle, 
 						AbilitySpec.GetAbilityInstances().Last()->GetCurrentActivationInfoRef().GetActivationPredictionKey()
 					);
