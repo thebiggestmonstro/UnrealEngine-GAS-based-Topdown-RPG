@@ -315,6 +315,41 @@ TArray<FRotator> UAuraAbilitySystemLibrary::EvenlySpacedRotators(const FVector& 
 	return Rotators;
 }
 
+void UAuraAbilitySystemLibrary::GetClosestTargets(int32 MaxTargets, const TArray<AActor*>& Actors, TArray<AActor*>& OutClosestTargets, const FVector& Origin)
+{
+	if (Actors.Num() <= MaxTargets)
+	{
+		OutClosestTargets = Actors;
+		return;
+	}
+
+	struct FActorDistance
+	{
+		AActor* Actor;
+		double Distance;
+		bool operator<(const FActorDistance& Other) const
+		{
+			return Distance < Other.Distance; 
+		}
+	};
+	TArray<FActorDistance> DistanceActorPairs;
+	DistanceActorPairs.Reserve(Actors.Num());
+
+	for (AActor* Actor : Actors)
+	{
+		const double Distance = (Actor->GetActorLocation() - Origin).SquaredLength();
+		DistanceActorPairs.Add({ Actor, Distance });
+	}
+
+	DistanceActorPairs.Sort();
+
+	OutClosestTargets.Empty();
+	for (int32 i = 0; i < FMath::Min(MaxTargets, DistanceActorPairs.Num()); ++i)
+	{
+		OutClosestTargets.Add(DistanceActorPairs[i].Actor);
+	}
+}
+
 void UAuraAbilitySystemLibrary::GetLivePlayersWithinRadius(const UObject* WorldContextObject,TArray<AActor*>& OutOverlappingActors, const TArray<AActor*>& ActorsToIgnore, float Radius, const FVector& SphereOrigin)
 {
 	FCollisionQueryParams SphereParams;
