@@ -3,6 +3,11 @@
 
 bool FAuraGameplayEffectContext::NetSerialize(FArchive& Ar, UPackageMap* Map, bool& bOutSuccess)
 {
+	if (!FGameplayEffectContext::NetSerialize(Ar, Map, bOutSuccess))
+	{
+		return false;
+	}
+
 	uint32 RepBits = 0;
 	if (Ar.IsSaving())
 	{
@@ -72,7 +77,7 @@ bool FAuraGameplayEffectContext::NetSerialize(FArchive& Ar, UPackageMap* Map, bo
 		}
 	}
 
-	Ar.SerializeBits(&RepBits, 9);
+	Ar.SerializeBits(&RepBits, 16);
 
 	if (RepBits & (1 << 0))
 	{
@@ -158,11 +163,5 @@ bool FAuraGameplayEffectContext::NetSerialize(FArchive& Ar, UPackageMap* Map, bo
 		KnockbackForce.NetSerialize(Ar, Map, bOutSuccess);
 	}
 
-	if (Ar.IsLoading())
-	{
-		AddInstigator(Instigator.Get(), EffectCauser.Get()); 
-	}
-
-	bOutSuccess = true;
-	return true;
+	return bOutSuccess;
 }

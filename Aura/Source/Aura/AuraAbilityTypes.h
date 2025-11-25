@@ -92,7 +92,7 @@ public:
 	/** FGameplayEffectContext Interface */
 	virtual UScriptStruct* GetScriptStruct() const
 	{
-		return FGameplayEffectContext::StaticStruct();
+		return FAuraGameplayEffectContext::StaticStruct();
 	}
 
 	virtual bool NetSerialize(FArchive& Ar, class UPackageMap* Map, bool& bOutSuccess);
@@ -129,7 +129,7 @@ protected:
 
 	UPROPERTY()
 	float DebuffFrequency = 0.f;
-
+	
 	TSharedPtr<FGameplayTag> DamageType;
 
 	UPROPERTY()

@@ -41,6 +41,19 @@ public:
 	virtual ECharacterClass GetCharacterClass_Implementation() override;
 	virtual FOnASCRegistered GetOnASCRegisteredDelegate() override;
 	virtual USkeletalMeshComponent* GetWeapon_Implementation() override;
+	virtual void Die(const FVector& DeathImpulse) override;
+	virtual FOnDeathSignature& GetOnDeathDelegate() override;
+
+	/*
+	* Associated With CombatInterface
+	*/
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void MulticastHandleDeath(const FVector& DeathImpulse);
+
+	virtual bool IsDead_Implementation() const override;
+
+	virtual AActor* GetAvatar_Implementation() override;
+
 
 protected:
 	virtual void BeginPlay() override;
@@ -93,15 +106,6 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	TObjectPtr<UAnimMontage> HitReactMontage;
 
-	virtual void Die(const FVector& DeathImpulse) override;
-
-	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleDeath(const FVector& DeathImpulse);
-
-	virtual bool IsDead_Implementation() const override;
-
-	virtual AActor* GetAvatar_Implementation() override;
-
 	bool bDead = false;
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
@@ -119,6 +123,7 @@ protected:
 	ECharacterClass CharacterClass = ECharacterClass::Warrior;
 
 	FOnASCRegistered OnAscRegistered;
+	FOnDeathSignature OnDeathDelegate;
 
 	/*
 	* Gameplay Effect Section
