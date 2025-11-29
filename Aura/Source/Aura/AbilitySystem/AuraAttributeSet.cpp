@@ -14,6 +14,7 @@
 #include "Interaction/PlayerInterface.h"
 #include "AuraAbilityTypes.h"
 #include "GameplayEffectComponents/TargetTagsGameplayEffectComponent.h"
+#include "AbilitySystem/GameplayEffect/DynamicGameplayEffect.h"
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
@@ -198,7 +199,7 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	FEffectProperties Props;
 	SetEffectProperties(Data, Props);
 
-	if (Props.TargetCharacter->Implements<UCombatInterface>() && ICombatInterface::Execute_IsDead(Props.TargetCharacter)) 
+	if (Props.TargetCharacter->Implements<UCombatInterface>() && ICombatInterface::Execute_IsDead(Props.TargetCharacter))
 		return;
 
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
@@ -320,9 +321,12 @@ void UAuraAttributeSet::HandleIncomingDamage(const FEffectProperties& Props)
 		else
 		{
 			{
-				FGameplayTagContainer TagContainer;
-				TagContainer.AddTag(FAuraGameplayTags::Get().Effects_HitReact);
-				Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
+				if (Props.TargetCharacter->Implements<UCombatInterface>() && !ICombatInterface::Execute_IsBeingShocked(Props.TargetCharacter))
+				{
+					FGameplayTagContainer TagContainer;
+					TagContainer.AddTag(FAuraGameplayTags::Get().Abilities_HitReact);
+					Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
+				}
 
 				const FVector& KnockbackForce = UAuraAbilitySystemLibrary::GetKnockbackForce(Props.EffectContextHandle);
 				if (!KnockbackForce.IsNearlyZero(1.f))
@@ -393,21 +397,26 @@ void UAuraAttributeSet::Debuff(const FEffectProperties& Props)
 	const float DebuffFrequency = UAuraAbilitySystemLibrary::GetDebuffFrequency(Props.EffectContextHandle);
 
 	FString DebuffName = FString::Printf(TEXT("DynamicDebuff_%s"), *DamageType.ToString());
-	// NewObject로 생성할 GE의 Outer를 GetTransientPackage() 함수로 설정하여 GE를 런타임에만 사용될 임시적인 데이터로 생성
-	UGameplayEffect* Effect = NewObject<UGameplayEffect>(GetTransientPackage(), FName(DebuffName));
+	TObjectPtr<UDynamicGameplayEffect> Effect = NewObject<UDynamicGameplayEffect>(GetTransientPackage(), FName(DebuffName));
 
 	Effect->DurationPolicy = EGameplayEffectDurationType::HasDuration;
 	Effect->Period = DebuffFrequency;
 	Effect->DurationMagnitude = FScalableFloat(DebuffDuration);
 
-	// FInheritedTagContainer: 태그가 어떻게 추가(Added)되고 무엇이 될지(CombinedTags)를 구분하여 관리하는 컨테이너
 	FInheritedTagContainer TagContainer = FInheritedTagContainer();
 	UTargetTagsGameplayEffectComponent& Component = Effect->FindOrAddComponent<UTargetTagsGameplayEffectComponent>();
-	// 추가될 태그를 'Added' 리스트에 추가 + 최종 결과 태그를 'CombinedTags' 리스트에 추가
-	TagContainer.Added.AddTag(GameplayTags.DamageTypesToDebuffs[DamageType]);
-	TagContainer.CombinedTags.AddTag(GameplayTags.DamageTypesToDebuffs[DamageType]);
-	// 디버프를 적용하는 GameplayEffect에 추가한 TargetTagsGameplayEffectComponent에 FInheritedTagContainer 추가
-	// 따라서 해당 GE가 가진 특정 대미지 타입에 연결된 디버프 Tag를 타겟에게 부여
+
+	const FGameplayTag DebuffTag = GameplayTags.DamageTypesToDebuffs[DamageType];
+	TagContainer.Added.AddTag(DebuffTag);
+
+	if (DebuffTag.MatchesTagExact(GameplayTags.Debuff_Stun))
+	{
+		TagContainer.Added.AddTag(GameplayTags.Player_Block_CursorTrace);
+		TagContainer.Added.AddTag(GameplayTags.Player_Block_InputHeld);
+		TagContainer.Added.AddTag(GameplayTags.Player_Block_InputPressed);
+		TagContainer.Added.AddTag(GameplayTags.Player_Block_InputReleased);
+	}
+
 	Component.SetAndApplyTargetTagChanges(TagContainer);
 	Effect->StackingType = EGameplayEffectStackingType::AggregateBySource;
 	Effect->StackLimitCount = 1;
@@ -423,7 +432,6 @@ void UAuraAttributeSet::Debuff(const FEffectProperties& Props)
 	if (FGameplayEffectSpec* MutableSpec = new FGameplayEffectSpec(Effect, EffectContext, 1.f))
 	{
 		FAuraGameplayEffectContext* AuraContext = static_cast<FAuraGameplayEffectContext*>(MutableSpec->GetContext().Get());
-		// new 방식으로 생성되어 이미 Heap에 할당한 인스턴스를 안전하게 SharedPtr로 변경하기 위해 MakeSharable 함수 호출
 		TSharedPtr<FGameplayTag> DebuffDamageType = MakeShareable(new FGameplayTag(DamageType));
 		AuraContext->SetDamageType(DebuffDamageType);
 

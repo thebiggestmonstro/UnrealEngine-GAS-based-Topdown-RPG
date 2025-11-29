@@ -51,13 +51,13 @@ template<class T>
 using TStaticFuncPtr = typename TBaseStaticDelegateInstance<T, FDefaultDelegateUserPolicy>::FFuncPtr;
 
 /**
- * 
+ *
  */
 UCLASS()
 class AURA_API UAuraAttributeSet : public UAttributeSet
 {
 	GENERATED_BODY()
-	
+
 public:
 	UAuraAttributeSet();
 
