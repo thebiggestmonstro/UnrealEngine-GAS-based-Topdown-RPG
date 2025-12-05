@@ -21,6 +21,7 @@ DECLARE_MULTICAST_DELEGATE_FourParams
 	const FGameplayTag& /*Slot*/, 
 	const FGameplayTag& /*PrevSlot*/
 );
+DECLARE_MULTICAST_DELEGATE_OneParam(FDeactivatePassiveAbility, const FGameplayTag& /*AbilityTag*/);
 
 /**
  * 
@@ -47,6 +48,7 @@ public:
 	FAbilitiesGiven AbilitiesGivenDelegate;	
 	FAbilityStatusChanged AbilityStatusChanged;
 	FAbilityEquipped AbilityEquipped;
+	FDeactivatePassiveAbility DeactivatePassiveAbility;
 
 	void ForEachAbility(const FForEachAbility& Delegate);
 
