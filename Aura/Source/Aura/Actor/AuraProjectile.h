@@ -55,6 +55,9 @@ protected:
 
 	bool bHit = false;
 
+	UPROPERTY()
+	TObjectPtr<UAudioComponent> LoopingSoundComponent;
+
 private:
 
 	UPROPERTY(EditDefaultsOnly)
@@ -68,7 +71,4 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<USoundBase> LoopingSound;
-
-	UPROPERTY()
-	TObjectPtr<UAudioComponent> LoopingSoundComponent;
 };
