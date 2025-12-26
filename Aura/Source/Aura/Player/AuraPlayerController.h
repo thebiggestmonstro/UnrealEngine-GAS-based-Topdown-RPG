@@ -15,6 +15,7 @@ class USplineComponent;
 class UDamageTextComponent;
 class UNiagaraSystem;
 class AMagicCircle;
+class UMVVM_LoadSlot;
 
 /**
  * 
@@ -36,6 +37,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void HideMagicCircle();
+
+	UFUNCTION(Server, Reliable)
+	void ServerSaveSlotData(UMVVM_LoadSlot* LoadSlot, int32 SlotIndex);
 
 protected:
 	virtual void BeginPlay() override;

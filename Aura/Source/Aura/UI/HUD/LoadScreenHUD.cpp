@@ -12,8 +12,14 @@ void ALoadScreenHUD::BeginPlay()
 
 	LoadScreenViewModel = NewObject<UMVVM_LoadScreen>(this, LoadScreenViewModelClass);
 	LoadScreenViewModel->InitializeLoadSlots();
+	if (AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(GetOwningPlayerController()))
+	{
+		LoadScreenViewModel->SetOwningPlayerController(AuraPlayerController);
+	}
 
 	LoadScreenWidget = CreateWidget<ULoadScreenWidget>(GetWorld(), LoadScreenWidgetClass);
 	LoadScreenWidget->AddToViewport();
 	LoadScreenWidget->BlueprintInitializeWidget();
+
+	LoadScreenViewModel->LoadData();
 }

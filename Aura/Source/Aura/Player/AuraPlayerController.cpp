@@ -17,6 +17,8 @@
 #include "NiagaraFunctionLibrary.h"
 #include "Actor/MagicCircle.h"
 #include "Aura/Aura.h"
+#include "Game/AuraGameModeBase.h"
+#include "Kismet/GameplayStatics.h"
 
 AAuraPlayerController::AAuraPlayerController()
 {
@@ -305,6 +307,14 @@ void AAuraPlayerController::HideMagicCircle()
 	if (IsValid(MagicCircle))
 	{
 		MagicCircle->Destroy();
+	}
+}
+
+void AAuraPlayerController::ServerSaveSlotData_Implementation(UMVVM_LoadSlot* LoadSlot, int32 SlotIndex)
+{
+	if (AAuraGameModeBase* AuraGameMode = Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(this)))
+	{
+		AuraGameMode->SaveSlotData(LoadSlot, SlotIndex);
 	}
 }
 

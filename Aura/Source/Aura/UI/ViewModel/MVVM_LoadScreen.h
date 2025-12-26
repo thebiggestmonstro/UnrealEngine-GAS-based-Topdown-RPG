@@ -7,6 +7,7 @@
 #include "MVVM_LoadScreen.generated.h"
 
 class UMVVM_LoadSlot;
+class AAuraPlayerController;
 
 /**
  * 
@@ -33,6 +34,16 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SelectSlotButtonPressed(int32 Slot);
+
+	void LoadData();
+
+protected:
+	UPROPERTY()
+	TObjectPtr<AAuraPlayerController> OwningPlayerController;
+
+public:
+	void SetOwningPlayerController(AAuraPlayerController* PlayerController) { OwningPlayerController = PlayerController; }
+	AAuraPlayerController* GetOwningPlayerController() { return OwningPlayerController; }
 
 private:
 	UPROPERTY()
