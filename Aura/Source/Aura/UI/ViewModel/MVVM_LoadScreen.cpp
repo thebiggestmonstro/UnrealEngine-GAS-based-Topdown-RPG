@@ -21,6 +21,8 @@ void UMVVM_LoadScreen::InitializeLoadSlots()
 	LoadSlot_2->SetLoadSlotName(FString("LoadSlot_2"));
 	LoadSlot_2->SlotIndex = 2;
 	LoadSlots.Add(2, LoadSlot_2);
+
+	SetNumLoadSlots(LoadSlots.Num());
 }
 
 UMVVM_LoadSlot* UMVVM_LoadScreen::GetLoadSlotViewModelByIndex(int32 Index) const
@@ -46,7 +48,32 @@ void UMVVM_LoadScreen::NewGameButtonPressed(int32 Slot)
 
 void UMVVM_LoadScreen::SelectSlotButtonPressed(int32 Slot)
 {
+	SlotSelected.Broadcast();
 
+	for (const TTuple<int32, UMVVM_LoadSlot*> LoadSlot : LoadSlots)
+	{
+		if (LoadSlot.Key == Slot)
+		{
+			LoadSlot.Value->EnableSelectSlotButton.Broadcast(false);
+		}
+		else
+		{
+			LoadSlot.Value->EnableSelectSlotButton.Broadcast(true);
+		}
+	}
+
+	SelectedSlot = LoadSlots[Slot];
+}
+
+void UMVVM_LoadScreen::DeleteButtonPressed()
+{
+	if (IsValid(SelectedSlot))
+	{
+		AAuraGameModeBase::DeleteSlot(SelectedSlot->GetLoadSlotName(), SelectedSlot->SlotIndex);
+		SelectedSlot->SlotStatus = Vacant;
+		SelectedSlot->InitializeSlot();
+		SelectedSlot->EnableSelectSlotButton.Broadcast(true);
+	}
 }
 
 void UMVVM_LoadScreen::LoadData()
@@ -63,4 +90,9 @@ void UMVVM_LoadScreen::LoadData()
 		LoadSlot.Value->SetPlayerName(PlayerName);
 		LoadSlot.Value->InitializeSlot();
 	}
+}
+
+void UMVVM_LoadScreen::SetNumLoadSlots(int32 InNumLoadSlots)
+{
+	UE_MVVM_SET_PROPERTY_VALUE(NumLoadSlots, InNumLoadSlots);
 }
