@@ -51,6 +51,12 @@ public:
 	virtual void OnRep_Stunned() override;
 	virtual void OnRep_Burned() override;
 
+	UFUNCTION(Server, Reliable)
+	void ServerLoadProgress();
+
+	UFUNCTION(Server, Reliable)
+	void ServerSaveProgress(const FName& CheckpointTag);
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UCameraComponent> TopDownCameraComponent;
