@@ -265,6 +265,7 @@ void AAuraCharacter::ServerLoadProgress_Implementation()
 			if (UAuraAbilitySystemComponent* AuraASC = Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent))
 			{
 				AuraASC->AddCharacterAbilitiesFromSaveData(SaveData);
+				AuraASC->UpdateAbilityStatuses(SaveData->PlayerLevel);
 			}
 
 			if (AAuraPlayerState* AuraPlayerState = Cast<AAuraPlayerState>(GetPlayerState()))

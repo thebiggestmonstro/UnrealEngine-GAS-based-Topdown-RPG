@@ -31,14 +31,10 @@ void UAuraAbilitySystemComponent::AddCharacterAbilitiesFromSaveData(ULoadScreenS
 		}
 		else if (Data.AbilityType == FAuraGameplayTags::Get().Abilities_Type_Passive)
 		{
+			GiveAbility(LoadedAbilitySpec);
 			if (Data.AbilityStatus.MatchesTagExact(FAuraGameplayTags::Get().Abilities_Status_Equipped))
 			{
-				GiveAbilityAndActivateOnce(LoadedAbilitySpec);
-				MulticastActivatePassiveEffect(Data.AbilityTag, true);
-			}
-			else
-			{
-				GiveAbility(LoadedAbilitySpec);
+				TryActivateAbility(LoadedAbilitySpec.Handle);
 			}
 		}
 	}
@@ -398,6 +394,8 @@ void UAuraAbilitySystemComponent::ServerEquipAbility_Implementation(const FGamep
 						DeactivatePassiveAbility.Broadcast(GetAbilityTagFromSpec(*SpecWithSlot));
 					}
 
+					AbilitySpec->GetDynamicSpecSourceTags().RemoveTag(GetStatusFromSpec(*AbilitySpec));
+					AbilitySpec->GetDynamicSpecSourceTags().AddTag(GameplayTags.Abilities_Status_Unlocked);
 					ClearSlot(SpecWithSlot);
 				}
 			}
