@@ -19,6 +19,16 @@ class AURA_API ACheckpoint : public APlayerStart
 public:
 	ACheckpoint(const FObjectInitializer& ObjectInitializer);
 
+	UPROPERTY(BlueprintReadOnly, SaveGame)
+	bool bReached = false;
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	bool ShouldLoadTransform();
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void LoadActor();
+
+
 protected:
 	UFUNCTION()
 	virtual void OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
@@ -26,7 +36,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void CheckpointReached(UMaterialInstanceDynamic* DynamicMaterialInstance); \
+	void CheckpointReached(UMaterialInstanceDynamic* DynamicMaterialInstance); 
 
 	void HandleGlowEffects();
 

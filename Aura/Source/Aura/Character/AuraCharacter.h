@@ -55,6 +55,9 @@ public:
 	void ServerLoadProgress();
 
 	UFUNCTION(Server, Reliable)
+	void SeverLoadWorldState();
+
+	UFUNCTION(Server, Reliable)
 	void ServerSaveProgress(const FName& CheckpointTag);
 
 private:

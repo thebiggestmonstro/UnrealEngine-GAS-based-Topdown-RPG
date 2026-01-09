@@ -53,7 +53,8 @@ void AAuraCharacter::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 	InitAbilityActorInfo();
 	ServerLoadProgress();
-	AddCharacterAbilities();
+	//AddCharacterAbilities();
+	SeverLoadWorldState();
 }
 
 void AAuraCharacter::OnRep_PlayerState()
@@ -278,6 +279,16 @@ void AAuraCharacter::ServerLoadProgress_Implementation()
 
 			UAuraAbilitySystemLibrary::InitializeDefaultAttributesFromSaveData(this, AbilitySystemComponent, SaveData);
 		}
+	}
+}
+
+void AAuraCharacter::SeverLoadWorldState_Implementation()
+{
+	AAuraGameModeBase* AuraGameMode = Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(this));
+
+	if (AuraGameMode)
+	{
+		AuraGameMode->LoadWorldState(GetWorld());
 	}
 }
 
