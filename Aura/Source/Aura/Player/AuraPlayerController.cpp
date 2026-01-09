@@ -19,6 +19,7 @@
 #include "Aura/Aura.h"
 #include "Game/AuraGameModeBase.h"
 #include "Kismet/GameplayStatics.h"
+#include "Interaction/EnemyInterface.h"
 
 AAuraPlayerController::AAuraPlayerController()
 {
@@ -85,11 +86,16 @@ void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 		return;
 	}
 
-	if (InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
+	if (IsValid(ThisActor))
 	{
-		bTargeting = ThisActor ? true : false;
-		bAutoRunning = false;
+		TargetingStatus = ThisActor->Implements<UEnemyInterface>() ? ETargetingStatus::TargetingEnemy : ETargetingStatus::TargetingNonEnemy;
 	}
+	else
+	{
+		TargetingStatus = ETargetingStatus::NotTargeting;
+	}
+
+	bAutoRunning = false;
 
 	if (GetASC()) 
 	{
@@ -117,7 +123,7 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 		GetASC()->AbilityInputTagReleased(InputTag);
 	}
 
-	if (!bTargeting || !bShiftKeyDown)
+	if (TargetingStatus != ETargetingStatus::TargetingEnemy && !bShiftKeyDown) 
 	{
 		const APawn* ControlledPawn = GetPawn();
 		if (FollowTime <= ShortPressThreshold && ControlledPawn)
@@ -143,7 +149,7 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 		}
 
 		FollowTime = 0.f;
-		bTargeting = false;
+		TargetingStatus = ETargetingStatus::NotTargeting;
 	}
 }
 
@@ -162,9 +168,9 @@ void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 		return;
 	}
 
-	if (bTargeting || bShiftKeyDown)
+	if (TargetingStatus == ETargetingStatus::TargetingEnemy || bShiftKeyDown)
 	{
-		if (GetASC()) 
+		if (GetASC())
 			GetASC()->AbilityInputTagHeld(InputTag);
 	}
 	else
@@ -210,16 +216,8 @@ void AAuraPlayerController::CursorTrace()
 {
 	if (GetASC() && GetASC()->HasMatchingGameplayTag(FAuraGameplayTags::Get().Player_Block_CursorTrace))
 	{
-		if (LastActor) 
-		{
-			UnHighlightActor(LastActor);
-		}
-
-		if (ThisActor)
-		{
-			UnHighlightActor(ThisActor); 
-		}
-
+		UnHighlightActor(LastActor);
+		UnHighlightActor(ThisActor);
 		LastActor = nullptr;
 		ThisActor = nullptr;
 		return;

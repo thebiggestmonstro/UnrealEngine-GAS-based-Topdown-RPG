@@ -18,6 +18,13 @@ class UNiagaraSystem;
 class AMagicCircle;
 class UMVVM_LoadSlot;
 
+enum class ETargetingStatus : uint8
+{
+	TargetingEnemy,
+	TargetingNonEnemy,
+	NotTargeting
+};
+
 /**
  * 
  */
@@ -98,7 +105,7 @@ private:
 	float FollowTime = 0.f;
 	float ShortPressThreshold = 0.5f;
 	bool bAutoRunning = false;
-	bool bTargeting = false;
+	ETargetingStatus TargetingStatus = ETargetingStatus::NotTargeting;
 
 	UPROPERTY(EditDefaultsOnly)
 	float AutoRunAcceptanceRadius = 50.f;
