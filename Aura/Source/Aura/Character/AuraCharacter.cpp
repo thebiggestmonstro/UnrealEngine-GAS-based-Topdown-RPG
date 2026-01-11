@@ -71,6 +71,15 @@ int32 AAuraCharacter::GetPlayerLevel_Implementation()
 	return AuraPlayerState->GetPlayerLevel();
 }
 
+void AAuraCharacter::Die(const FVector& DeathImpulse)
+{
+	Super::Die(DeathImpulse);
+
+	ServerHandleDeath();
+
+	TopDownCameraComponent->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+}
+
 void AAuraCharacter::AddToXP_Implementation(int32 InXP)
 {
 	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
@@ -345,4 +354,18 @@ void AAuraCharacter::ServerSaveProgress_Implementation(const FName& CheckpointTa
 
 		AuraGameMode->SaveInGameProgressData(SaveData);
 	}
+}
+
+void AAuraCharacter::ServerHandleDeath_Implementation()
+{
+	FTimerDelegate DeathTimerDelegate;
+	DeathTimerDelegate.BindLambda([this]()
+		{
+			AAuraGameModeBase* AuraGM = Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(this));
+			if (AuraGM)
+			{
+				AuraGM->PlayerDied(this);
+			}
+		});
+	GetWorldTimerManager().SetTimer(DeathTimer, DeathTimerDelegate, DeathTime, false);
 }

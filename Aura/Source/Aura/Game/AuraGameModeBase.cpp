@@ -11,6 +11,8 @@
 #include "Serialization/ObjectAndNameAsStringProxyArchive.h"
 #include "Aura/AuraLogChannels.h"
 #include "Checkpoint/Checkpoint.h"
+#include "Actor/AuraEnemySpawnVolume.h"
+#include "GameFramework/Character.h"
 
 void AAuraGameModeBase::SaveSlotData(UMVVM_LoadSlot* LoadSlot, int32 SlotIndex)
 {
@@ -24,6 +26,7 @@ void AAuraGameModeBase::SaveSlotData(UMVVM_LoadSlot* LoadSlot, int32 SlotIndex)
 	LoadScreenSaveGame->PlayerName = LoadSlot->GetPlayerName();
 	LoadScreenSaveGame->SaveSlotStatus = Taken;
 	LoadScreenSaveGame->MapName = LoadSlot->GetMapName();
+	LoadScreenSaveGame->MapAssetName = LoadSlot->MapAssetName;
 	LoadScreenSaveGame->PlayerStartTag = LoadSlot->PlayerStartTag;
 
 	UGameplayStatics::SaveGameToSlot(LoadScreenSaveGame, LoadSlot->GetLoadSlotName(), SlotIndex);
@@ -81,6 +84,17 @@ AActor* AAuraGameModeBase::ChoosePlayerStart_Implementation(AController* Player)
 	}
 
 	return SelectedActor;
+}
+
+void AAuraGameModeBase::PlayerDied(ACharacter* DeadCharacter)
+{
+	ULoadScreenSaveGame* SaveGame = RetrieveInGameSaveData();
+	if (!IsValid(SaveGame))
+	{
+		return;
+	}
+
+	UGameplayStatics::OpenLevel(DeadCharacter, FName(SaveGame->MapAssetName));
 }
 
 ULoadScreenSaveGame* AAuraGameModeBase::RetrieveInGameSaveData()
@@ -147,6 +161,27 @@ void AAuraGameModeBase::SaveWorldState(UWorld* World, const FString& Destination
 			SavedMap.SavedActors.AddUnique(SavedActor);
 		}
 
+		for (TActorIterator<AAuraEnemySpawnVolume> It(World); It; ++It)
+		{
+			AAuraEnemySpawnVolume* EnemySpawnVolume = *It;
+
+			if (!IsValid(EnemySpawnVolume))
+			{
+				continue;
+			}
+
+			FSavedActor SavedActor;
+			SavedActor.ActorName = EnemySpawnVolume->GetFName();
+			SavedActor.Transform = EnemySpawnVolume->GetTransform();
+
+			FMemoryWriter MemoryWriter(SavedActor.Bytes);
+			FObjectAndNameAsStringProxyArchive Archive(MemoryWriter, true);
+			Archive.ArIsSaveGame = true;
+			EnemySpawnVolume->Serialize(Archive);
+
+			SavedMap.SavedActors.AddUnique(SavedActor);
+		}
+
 		for (FSavedMap& MapToReplace : SaveGame->SavedMaps)
 		{
 			if (MapToReplace.MapAssetName == WorldName)
@@ -200,6 +235,29 @@ void AAuraGameModeBase::LoadWorldState(UWorld* World) const
 					Checkpoint->Serialize(Archive);
 
 					Checkpoint->LoadActor();
+				}
+			}
+		}
+
+		for (TActorIterator<AAuraEnemySpawnVolume> It(World); It; ++It)
+		{
+			AAuraEnemySpawnVolume* EnemySpawnVolume = *It;
+
+			if (!IsValid(EnemySpawnVolume))
+			{
+				continue;
+			}
+
+			for (FSavedActor SavedActor : SaveGame->GetSavedMapWithMapName(WorldName).SavedActors)
+			{
+				if (SavedActor.ActorName == EnemySpawnVolume->GetFName())
+				{
+					FMemoryReader MemoryReader(SavedActor.Bytes);
+					FObjectAndNameAsStringProxyArchive Archive(MemoryReader, true);
+					Archive.ArIsSaveGame = true;
+					EnemySpawnVolume->Serialize(Archive);
+
+					EnemySpawnVolume->LoadActor();
 				}
 			}
 		}

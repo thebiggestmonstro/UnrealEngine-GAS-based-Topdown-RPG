@@ -41,6 +41,7 @@ void UMVVM_LoadScreen::NewSlotButtonPressed(int32 Slot, const FString& EnteredNa
 		AAuraGameModeBase* AuraGameMode = Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(this));
 		LoadSlots[Slot]->SetMapName(AuraGameMode->DefaultMapName);
 		LoadSlots[Slot]->PlayerStartTag = AuraGameMode->DefaultPlayerStartTag;
+		LoadSlots[Slot]->MapAssetName = AuraGameMode->DefaultMap.ToSoftObjectPath().GetAssetName();
 
 		AuraPlayerController->ServerSaveSlotData_Implementation(LoadSlots[Slot], Slot);
 		LoadSlots[Slot]->InitializeSlot();
