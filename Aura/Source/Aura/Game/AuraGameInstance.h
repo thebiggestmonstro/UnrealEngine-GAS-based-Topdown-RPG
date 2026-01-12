@@ -8,6 +8,7 @@
 
 class UCharacterClassInfo;
 class UAbilityInfo;
+class ULootTiers;
 
 /**
  * 
@@ -26,6 +27,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Ability Info")
 	TObjectPtr<UAbilityInfo> AbilityInfo;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Loot Tiers")
+	TObjectPtr<ULootTiers> LootTiers;
 
 	UPROPERTY()
 	FName PlayerStartTag = FName();

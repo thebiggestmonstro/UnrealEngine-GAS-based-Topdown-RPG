@@ -61,6 +61,9 @@ public:
 
 	void SetLevel(int32 InLevel) { Level = InLevel; }
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void SpawnLoot();
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void InitAbilityActorInfo() override;
