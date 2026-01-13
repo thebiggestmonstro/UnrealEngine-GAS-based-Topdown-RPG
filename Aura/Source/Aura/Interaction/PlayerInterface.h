@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+#include "GameplayEffectTypes.h"
 #include "PlayerInterface.generated.h"
 
 // This class does not need to be modified.
@@ -63,4 +64,6 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void SaveProgress(const FName& CheckpointTag);
+
+	virtual FOnExternalGameplayModifierDependencyChange* GetOnModifierDependencyChanged() = 0;
 };

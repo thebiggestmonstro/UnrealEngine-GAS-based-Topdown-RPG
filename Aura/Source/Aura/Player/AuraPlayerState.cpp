@@ -5,6 +5,7 @@
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "Net/UnrealNetwork.h"
+#include "Interaction/PlayerInterface.h"
 
 AAuraPlayerState::AAuraPlayerState()
 {
@@ -31,6 +32,13 @@ void AAuraPlayerState::AddToXP(int32 InXP)
 void AAuraPlayerState::AddToLevel(int32 InLevel)
 {
 	Level += InLevel;
+
+	APawn* ControlledPawn = this->GetPawn();
+	if (IPlayerInterface* PlayerInterface = Cast<IPlayerInterface>(ControlledPawn))
+	{
+		PlayerInterface->GetOnModifierDependencyChanged()->Broadcast();
+	}
+
 	OnLevelChangedDelegate.Broadcast(Level, false);
 }
 
